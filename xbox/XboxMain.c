@@ -293,7 +293,12 @@ int main()
 	// We need to do this here for the GUI
 	wglCreateContext(NULL);
 	wglMakeCurrent(NULL, NULL);
+
+	// If you must perform random I/O (which we do!), increase the file cache size temporarily using XSetFileCacheSize.
+	// XSetFileCacheSize(8 * 1024 * 1024);
 #endif
+
+
 
 	SysRunGUI();
 }
