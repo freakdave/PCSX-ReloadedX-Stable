@@ -2808,9 +2808,9 @@ void CALLBACK Plugin_GPUreadDataMem(uint32_t *pMem, int iSize)
 
  // adjust read ptr, if necessary
  while(VRAMRead.ImagePtr>=psxVuw_eom)
-  VRAMRead.ImagePtr-=iGPUHeight*1024;
+  VRAMRead.ImagePtr-=524288;//iGPUHeight*1024;
  while(VRAMRead.ImagePtr<psxVuw)
-  VRAMRead.ImagePtr+=iGPUHeight*1024;
+  VRAMRead.ImagePtr+=524288;//iGPUHeight*1024;
 
  if((iFrameReadType&1 && iSize>1) &&
     !(iDrawnSomething==2 &&
@@ -2832,7 +2832,7 @@ void CALLBACK Plugin_GPUreadDataMem(uint32_t *pMem, int iSize)
      GPUdataRet=(uint32_t)*VRAMRead.ImagePtr;
 
      VRAMRead.ImagePtr++;
-     if(VRAMRead.ImagePtr>=psxVuw_eom) VRAMRead.ImagePtr-=iGPUHeight*1024;
+     if(VRAMRead.ImagePtr>=psxVuw_eom) VRAMRead.ImagePtr-=524288;//iGPUHeight*1024;
      VRAMRead.RowsRemaining --;
 
      if(VRAMRead.RowsRemaining<=0)
@@ -2840,7 +2840,7 @@ void CALLBACK Plugin_GPUreadDataMem(uint32_t *pMem, int iSize)
        VRAMRead.RowsRemaining = VRAMRead.Width;
        VRAMRead.ColsRemaining--;
        VRAMRead.ImagePtr += 1024 - VRAMRead.Width;
-       if(VRAMRead.ImagePtr>=psxVuw_eom) VRAMRead.ImagePtr-=iGPUHeight*1024;
+       if(VRAMRead.ImagePtr>=psxVuw_eom) VRAMRead.ImagePtr-=524288;//iGPUHeight*1024;
       }
 
      // higher 16 bit (always, even if it's an odd width)
@@ -2851,14 +2851,14 @@ void CALLBACK Plugin_GPUreadDataMem(uint32_t *pMem, int iSize)
       {FinishedVRAMRead();goto ENDREAD;}
 
      VRAMRead.ImagePtr++;
-     if(VRAMRead.ImagePtr>=psxVuw_eom) VRAMRead.ImagePtr-=iGPUHeight*1024;
+     if(VRAMRead.ImagePtr>=psxVuw_eom) VRAMRead.ImagePtr-=524288;//iGPUHeight*1024;
      VRAMRead.RowsRemaining--;
      if(VRAMRead.RowsRemaining<=0)
       {
        VRAMRead.RowsRemaining = VRAMRead.Width;
        VRAMRead.ColsRemaining--;
        VRAMRead.ImagePtr += 1024 - VRAMRead.Width;
-       if(VRAMRead.ImagePtr>=psxVuw_eom) VRAMRead.ImagePtr-=iGPUHeight*1024;
+       if(VRAMRead.ImagePtr>=psxVuw_eom) VRAMRead.ImagePtr-=524288;//iGPUHeight*1024;
       }
      if(VRAMRead.ColsRemaining <= 0)
       {FinishedVRAMRead();goto ENDREAD;}
@@ -2969,9 +2969,9 @@ STARTVRAM:
   {
    // make sure we are in vram
    while(VRAMWrite.ImagePtr>=psxVuw_eom)
-    VRAMWrite.ImagePtr-=iGPUHeight*1024;
+    VRAMWrite.ImagePtr-=524288;//iGPUHeight*1024;
    while(VRAMWrite.ImagePtr<psxVuw)
-    VRAMWrite.ImagePtr+=iGPUHeight*1024;
+    VRAMWrite.ImagePtr+=524288;//iGPUHeight*1024;
 
    // now do the loop
    while(VRAMWrite.ColsRemaining>0)
@@ -2987,7 +2987,7 @@ STARTVRAM:
        if(VRAMWrite.Width+VRAMWrite.x-VRAMWrite.RowsRemaining >= 1024) {
          *((VRAMWrite.ImagePtr++)-1024) = (unsigned short)gdata;
        } else { *VRAMWrite.ImagePtr++ = (unsigned short)gdata;}
-       if(VRAMWrite.ImagePtr>=psxVuw_eom) VRAMWrite.ImagePtr-=iGPUHeight*1024;// Check if went past framebuffer
+       if(VRAMWrite.ImagePtr>=psxVuw_eom) VRAMWrite.ImagePtr-=524288;//iGPUHeight*1024;// Check if went past framebuffer
        VRAMWrite.RowsRemaining --;
 
        // Check if end at odd pixel drawn
@@ -3008,7 +3008,7 @@ STARTVRAM:
        if(VRAMWrite.Width+VRAMWrite.x-VRAMWrite.RowsRemaining >= 1024) {
          *((VRAMWrite.ImagePtr++)-1024) = (unsigned short)(gdata>>16);
        } else *VRAMWrite.ImagePtr++ = (unsigned short)(gdata>>16);
-       if(VRAMWrite.ImagePtr>=psxVuw_eom) VRAMWrite.ImagePtr-=iGPUHeight*1024;// Check if went past framebuffer
+       if(VRAMWrite.ImagePtr>=psxVuw_eom) VRAMWrite.ImagePtr-=524288;//iGPUHeight*1024;// Check if went past framebuffer
        VRAMWrite.RowsRemaining --;
       }
 
