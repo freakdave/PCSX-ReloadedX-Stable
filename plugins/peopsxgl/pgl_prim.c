@@ -1130,7 +1130,7 @@ BOOL CheckAgainstFrontScreen(short imageX0,short imageY0,short imageX1,short ima
 
 ////////////////////////////////////////////////////////////////////////
 
-void PrepareFullScreenUpload (int Position)
+void PrepareFullScreenUpload (short Position)
 {
  if (Position==-1)                                     // rgb24
   {

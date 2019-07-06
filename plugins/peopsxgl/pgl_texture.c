@@ -77,7 +77,7 @@ GLubyte       ubPaletteBuffer[256][4];
 GLuint        gTexMovieName=0;
 GLuint        gTexBlurName=0;
 GLuint        gTexFrameName=0;
-int           iTexGarbageCollection=1;
+int           iTexGarbageCollection=0;
 uint32_t      dwTexPageComp=0;
 int           iVRamSize=0;
 int           iClampType=GL_CLAMP;
@@ -203,10 +203,10 @@ GLubyte *                texturebuffer = NULL;
 uint32_t                 g_x1,g_y1,g_x2,g_y2;
 unsigned char            ubOpaqueDraw = 0;
 
-unsigned short MAXTPAGES     = 32;
+unsigned short MAXTPAGES     = MAXTPAGES_MAX;
 unsigned short CLUTMASK      = 0x7fff;
 unsigned short CLUTYMASK     = 0x1ff;
-unsigned short MAXSORTTEX    = 196;
+unsigned short MAXSORTTEX    = MAXSORTTEX_MAX;
 
 ////////////////////////////////////////////////////////////////////////
 // Texture color conversions... all my ASM funcs are removed for easier
@@ -436,8 +436,8 @@ unsigned short P4RGBA(unsigned short BGR)
 // CHECK TEXTURE MEM (on plugin startup)
 ////////////////////////////////////////////////////////////////////////
 
-int iFTexA=512;
-int iFTexB=512;
+int iFTexA=256;
+int iFTexB=256;
 
 void CheckTextureMemory(void)
 {
@@ -574,10 +574,10 @@ void InitializeTextureStore()
   }
  else
   {
-   MAXTPAGES     = 32;
+   MAXTPAGES     = MAXTPAGES_MAX;
    CLUTMASK      = 0x7fff;
    CLUTYMASK     = 0x1ff;
-   MAXSORTTEX    = 196;
+   MAXSORTTEX    = MAXSORTTEX_MAX;
   }
 
  memset(vertex,0,4*sizeof(OGLVertex));                 // init vertices
@@ -716,7 +716,7 @@ void ResetTextureArea(BOOL bDelTex)
 // Invalidate tex windows
 ////////////////////////////////////////////////////////////////////////
 
-void InvalidateWndTextureArea(int X, int Y, int W, int H)
+void InvalidateWndTextureArea(short X, short Y, short W, short H)
 {
  int i,px1,px2,py1,py2,iYM=1;
  textureWndCacheEntry * tsw=wcWndtexStore;
@@ -912,7 +912,7 @@ void InvalidateTextureAreaEx(void)
 
 ////////////////////////////////////////////////////////////////////////
 
-void InvalidateTextureArea(int X, int Y, int W, int H)
+void InvalidateTextureArea(short X, short Y, short W, short H)
 {
  if (W == 0 && H == 0) return;
 
@@ -2521,7 +2521,7 @@ GLuint BlackFake15BitTexture(void)
 BOOL bFakeFrontBuffer=FALSE;
 BOOL bIgnoreNextTile =FALSE;
 
-int iFTex=512;
+int iFTex=256;
 
 GLuint Fake15BitTexture(void)
 {
@@ -2574,10 +2574,10 @@ GLuint Fake15BitTexture(void)
   {
    char * p;
 
-   if(iResX>1280 || iResY>1024) iFTex=2048;
+   if(iResX>1280 || iResY>1024) iFTex=1024;
    else
-   if(iResX>640  || iResY>480)  iFTex=1024;
-   else                         iFTex=512; 
+   if(iResX>640  || iResY>480)  iFTex=512;
+   else                         iFTex=256; 
 
    glGenTextures(1, &gTexFrameName);
    gTexName=gTexFrameName;
@@ -4913,11 +4913,11 @@ GLuint SelectSubTextureS(int TextureMode, uint32_t GivenClutId)
  OPtr=CheckTextureInSubSCache(TextureMode,GivenClutId,&iCache);
 
  // cache full? compress and try again
- if(iCache==0xffff)
-  {
-   CompressTextureSpace();
-   OPtr=CheckTextureInSubSCache(TextureMode,GivenClutId,&iCache);
-  }
+ //if(iCache==0xffff)
+ // {
+ //  CompressTextureSpace();
+ //  OPtr=CheckTextureInSubSCache(TextureMode,GivenClutId,&iCache);
+ // }
 
  // found? fine
  usLRUTexPage=iCache;
